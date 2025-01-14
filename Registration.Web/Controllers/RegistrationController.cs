@@ -10,16 +10,19 @@ namespace Registration.Web.Controllers
     public class RegistrationController : ControllerBase
     {
         private readonly IRegister _registartion;
+        private readonly IRegister _registartionServices;
         private readonly IMessageProducer _messageProducer;
         private readonly IMessageEmail _messageEmail;
         public RegistrationController(IRegister registartionServices, IMessageProducer messageProducer, IMessageEmail messageEmail)
         {
             _registartion = registartionServices;
+            _registartionServices = registartionServices;
             _messageProducer = messageProducer;
             _messageEmail = messageEmail;
         }
 
         [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult> Register([EmailAddress(ErrorMessage = "Invalid email format.")] string email)
         {
             try
@@ -29,7 +32,7 @@ namespace Registration.Web.Controllers
                     Path = "/",
                     HttpOnly = true,
                     Secure = true,
-                    Expires = DateTimeOffset.UtcNow.AddDays(1)
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
                 };
                 var model = new RegisterModel(email);
                 var result = await _registartion.Registration(model);
