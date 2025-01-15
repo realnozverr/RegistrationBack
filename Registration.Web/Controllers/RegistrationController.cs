@@ -20,7 +20,6 @@ namespace Registration.Web.Controllers
         }
 
         [HttpPost]
-        [HttpPost("register")]
         public async Task<ActionResult> Register([EmailAddress(ErrorMessage = "Invalid email format.")] string email)
         {
             try

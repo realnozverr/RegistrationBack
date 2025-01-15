@@ -15,6 +15,6 @@ namespace Registration.Web.Models
 
         public string? Email { get; init; }
 
-        public string Code { get; init; }
+        public string? Code { get; init; }
     }
 }
