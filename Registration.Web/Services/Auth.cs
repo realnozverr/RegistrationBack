@@ -19,7 +19,7 @@ namespace Registration.Web.Services
             {
                 await connection.OpenAsync();
 
-                string sql = "SELECT Email, DateTime, Code FROM Register WHERE Email = @Email";
+                string sql = "SELECT datetime, email, code FROM Register WHERE email = @Email";
 
                 var result = await connection.QuerySingleOrDefaultAsync<RegisterModel>(sql, new { Email = email });
 

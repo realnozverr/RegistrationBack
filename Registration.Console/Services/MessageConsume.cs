@@ -8,6 +8,8 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Registration.ConsoleConsumer.Services;
+using System.Text.Json;
+using Registration.ConsoleConsumer.Models;
 
 namespace Registration.ConsoleConsumer.Services
 {
@@ -30,17 +32,24 @@ namespace Registration.ConsoleConsumer.Services
             using var connection = await factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: "registerQueue", durable: false, exclusive: false, autoDelete: false,
-            arguments: null);
+            await channel.QueueDeclareAsync(queue: "registerQueue", durable: true, exclusive: false, autoDelete: false, arguments: null);
+
+            Console.WriteLine("жду сообщения");
 
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.ReceivedAsync += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                Console.WriteLine($" [x] Received {message}");
+                RegModel regModel = JsonSerializer.Deserialize<RegModel>(message);
+                Console.WriteLine($"{regModel.DateTime.ToString("yyyy.MM.dd HH:mm")} {regModel.Email} код: {regModel.Code}");
                 return Task.CompletedTask;
             };
+
+            await channel.BasicConsumeAsync("registerQueue", autoAck: true, consumer: consumer);
+
+            Console.WriteLine("тыкните чтобы выйти");
+            Console.ReadLine();
         }
     }
 }

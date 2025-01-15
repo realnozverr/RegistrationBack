@@ -4,6 +4,10 @@ namespace Registration.Web.Models
 {
     public record RegisterModel
     {
+        public RegisterModel()
+        {
+            
+        }
         public RegisterModel(string email)
         {
             DateTime = DateTime.UtcNow;
