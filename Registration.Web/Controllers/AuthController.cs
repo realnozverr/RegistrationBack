@@ -16,7 +16,7 @@ namespace Registration.Web.Controllers
             _auth = auth;
         }
         [HttpPost]
-        public async Task<ActionResult> Auth(string code)
+        public async Task<ActionResult> Auth([FromBody] string code)
         {
             try
             {

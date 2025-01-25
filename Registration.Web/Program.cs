@@ -12,6 +12,17 @@ namespace Registration.Web
 
             // Add services to the container.
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ReactApp", builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                           .AllowAnyHeader()                     
+                           .AllowAnyMethod()                     
+                           .AllowCredentials();                  
+                });
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -29,6 +40,8 @@ namespace Registration.Web
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("ReactApp");
 
             app.UseHttpsRedirection();
 
